@@ -86,7 +86,6 @@ fun Main(modifier: Modifier = Modifier) {
                     .buildUpon()
                     .setClippingConfiguration(
                         MediaItem.ClippingConfiguration.Builder()
-                            .setStartPositionMs(0)
                             .setEndPositionMs(1.seconds.inWholeMilliseconds)
                             .build()
                     )
