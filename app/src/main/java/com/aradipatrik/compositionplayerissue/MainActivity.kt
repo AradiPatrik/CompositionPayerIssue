@@ -104,16 +104,6 @@ fun Main(modifier: Modifier = Modifier) {
                 .build()
         }
 
-        val imageEditedMediaItems = images.map {
-            EditedMediaItem.Builder(
-                MediaItem.fromUri(it)
-                    .buildUpon()
-                    .setImageDurationMs(1.seconds.inWholeMilliseconds)
-                    .build()
-            )
-                .setDurationUs(1.seconds.inWholeMicroseconds)
-                .build()
-        }
 
         val fd = context.assets.openFd("audio.mp3")
         mediaRetriever.setDataSource(fd.fileDescriptor, fd.startOffset, fd.length)
@@ -122,7 +112,7 @@ fun Main(modifier: Modifier = Modifier) {
             .extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
             ?.toLong()?.milliseconds ?: error("Couldn't parse duration")
         val videoSequence =
-            EditedMediaItemSequence.Builder(videoEditedMediaItems + imageEditedMediaItems).build()
+            EditedMediaItemSequence.Builder(videoEditedMediaItems).build()
         val audioSequence = EditedMediaItemSequence.Builder(
             EditedMediaItem.Builder(
                 MediaItem.fromUri(audio)
