@@ -1,6 +1,7 @@
 package com.aradipatrik.compositionplayerissue
 
 import android.annotation.SuppressLint
+import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -26,6 +27,7 @@ import androidx.media3.transformer.EditedMediaItem
 import androidx.media3.transformer.EditedMediaItemSequence
 import androidx.media3.ui.PlayerView
 import com.aradipatrik.compositionplayerissue.ui.theme.CompositionPlayerIssueTheme
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 class MainActivity : ComponentActivity() {
@@ -107,6 +109,13 @@ fun Main(modifier: Modifier = Modifier) {
                 .build()
         }
 
+        val mediaRetriever = MediaMetadataRetriever()
+        val fd = context.assets.openFd("audio.mp3")
+        mediaRetriever.setDataSource(fd.fileDescriptor, fd.startOffset, fd.length)
+
+        val duration = mediaRetriever
+            .extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+            ?.toLong()?.milliseconds ?: error("Couldn't parse duration")
         val videoSequence =
             EditedMediaItemSequence.Builder(videoEditedMediaItems + imageEditedMediaItems).build()
         val audioSequence = EditedMediaItemSequence.Builder(
@@ -121,7 +130,7 @@ fun Main(modifier: Modifier = Modifier) {
                     )
                     .build()
             )
-                .setDurationUs(100.seconds.inWholeMicroseconds)
+                .setDurationUs(duration.inWholeMicroseconds)
                 .build()
         )
             .build()
