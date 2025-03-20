@@ -80,9 +80,15 @@ fun Main(modifier: Modifier = Modifier) {
             Assets.uri("hotpot.mp4")
         )
 
+        val mediaRetriever = MediaMetadataRetriever()
         val audio = Assets.uri("audio.mp3")
 
         val videoEditedMediaItems = videos.map {
+            val fd = context.assets.openFd(it.toString().substringAfterLast("/"))
+            mediaRetriever.setDataSource(fd.fileDescriptor, fd.startOffset, fd.length)
+            val currentDuration = mediaRetriever
+                .extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+                ?.toLong()?.milliseconds ?: error("Couldn't parse duration")
             EditedMediaItem.Builder(
                 MediaItem.fromUri(it)
                     .buildUpon()
@@ -94,7 +100,7 @@ fun Main(modifier: Modifier = Modifier) {
                     .build()
             )
                 .setRemoveAudio(true)
-                .setDurationUs(1.seconds.inWholeMicroseconds)
+                .setDurationUs(currentDuration.inWholeMicroseconds)
                 .build()
         }
 
@@ -109,7 +115,6 @@ fun Main(modifier: Modifier = Modifier) {
                 .build()
         }
 
-        val mediaRetriever = MediaMetadataRetriever()
         val fd = context.assets.openFd("audio.mp3")
         mediaRetriever.setDataSource(fd.fileDescriptor, fd.startOffset, fd.length)
 

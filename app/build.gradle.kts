@@ -5,6 +5,12 @@ plugins {
 }
 
 android {
+    aaptOptions {
+        noCompress.add("1.mp4")
+        noCompress.add("2.mov")
+        noCompress.add("food1.mp4")
+        noCompress.add("hotpot.mp4")
+    }
     namespace = "com.aradipatrik.compositionplayerissue"
     compileSdk = 35
 
