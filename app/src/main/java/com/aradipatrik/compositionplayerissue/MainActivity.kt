@@ -54,13 +54,6 @@ class MainActivity : ComponentActivity() {
 fun Main(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val player = remember {
-        val images = listOf(
-            Assets.uri("car.jpg"),
-            Assets.uri("food2.jpg"),
-            Assets.uri("img.png"),
-            Assets.uri("party.jpg"),
-        )
-
         val videos = listOf(
             Assets.uri("1.mp4"),
             Assets.uri("2.mov"),
